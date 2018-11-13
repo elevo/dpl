@@ -82,9 +82,11 @@ module DPL
             raise e
           end
           install_cmd = "gem install dpl-#{provider_gem_name || opt} -v #{ENV['DPL_VERSION'] || DPL::VERSION}"
+          local_gemspec = File.join(Dir.pwd, "dpl-#{GEM_NAME_OF[provider_gem_name] || opt_lower}.gemspec"
+          local_gem = File.join(Dir.pwd, "dpl-#{GEM_NAME_OF[provider_gem_name] || opt_lower}-#{ENV['DPL_VERSION'] || DPL::VERSION}.gem"
 
-          if File.exist?(local_gem = File.join(Dir.pwd, "dpl-#{GEM_NAME_OF[provider_gem_name] || opt_lower}-#{ENV['DPL_VERSION'] || DPL::VERSION}.gem"))
-            install_cmd = "gem install #{local_gem}"
+          if File.exist?(local_gemspec)
+            install_cmd = "gem build #{local_gemspec} && gem install #{local_gem}"
           end
 
           context.shell(install_cmd)
